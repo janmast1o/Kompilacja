@@ -1,0 +1,33 @@
+a = "Ala ma kota";
+b = "Nic specjalnego" # testing strings;
+
+return_variable = "Nie teraz";
+if_variable = "";
+else_variable = if_variable; # testing proper differentiation between keywords and ids containing keywords as substrings
+
+function unimportant_function() {
+
+    a = 3e+16;
+    b = .84E-77;
+    if (a >= b) {
+        c = a+b;
+        A = zeros(2*a);
+        A = A';
+        i = 0;
+        while (i in 1:10) {
+            print return_variable;
+            i += 1;
+            break;
+        }
+        for (j in 1:10 ; j+=1)
+            continue;
+        return false;
+    } else {
+        B = eye(3);
+        C = ones(3);
+        return true;
+    }
+
+} # testing keywords
+
+

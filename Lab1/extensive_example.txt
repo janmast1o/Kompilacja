@@ -1,0 +1,90 @@
+a = 15;
+b = 2e20;
+c = 2e+10;
+d = 2E30;
+e = 2E+30; # testing ints
+f = 2E+30+3E+15; # f = 2E+30 + 3E+15
+g = 17e+3-4E+2*10e5; # g = 17e+3 - 4E+2 * 10e5
+
+a = 83.5;
+b = 84.;
+c = 84.51e16;
+d = 84.51e-16;
+e = 84.51e+16;
+f = 84.51E16;
+g = 84.51E-16;
+h = 84.51E+16;
+i = 84.e-16
+j = 84.e16
+k = 84e+16
+l = 84.e-16
+m = 84.e16
+n = 84e+16
+o = .45e16
+p = .45e-16
+r = .45e+16
+s = .45E16
+t = .45E-16
+u = .45E+16
+w = 2e-30
+v = 2E-30 # testing floats
+
+a = "Ala ma kota";
+b = "Nic specjalnego" # testing strings;
+
+return_variable = "Nie teraz";
+if_variable = "";
+else_variable = if_variable; # testing proper differentiation between keywords and ids containing keywords as substrings
+
+function unimportant_function() {
+
+    a = 3e+16;
+    b = .84E-77;
+    if (a >= b) {
+        c = a+b;
+        A = zeros(2*a);
+        A = A';
+        i = 0;
+        while (i in 1:10) {
+            print return_variable;
+            i += 1;
+            break;
+        }
+        for (j in 1:10 ; j+=1)
+            continue;
+        return false;
+    } else {
+        B = eye(3);
+        C = ones(3);
+        return true;
+    }
+
+} # testing keywords
+
+a = 1+1;
+b = 1-1;
+c = 4*.4;
+d = 5/2; # testing binary operators
+
+print(1 == 5);
+print(b != c);
+print(a > d);
+print(a < c);;
+print(a <= a);
+print(1 >= b); # testing compare operators
+
+a += b;
+a -= c;
+c *= d;
+d /= a; # testing assign operators
+
+A = zeros(3);
+B = eye(3);
+C = [[3,4,5],
+     [6,8,99],
+     [1,1,10]];
+matrix_set = {A, B, C};
+D = A .+ B;
+E = A .- D;
+F = C .* E;
+G = F ./ A; # dot operators
