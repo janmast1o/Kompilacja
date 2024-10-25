@@ -3,26 +3,18 @@ from sly import Lexer
 
 
 class Scanner(Lexer):
-    # tokens = {
-    #     PLUS, MINUS, TIMES, DIVIDE, DOTPLUS, DOTMINUS, DOTTIMES, DOTDIVIDE,
-    #     ASSIGN, PLUSASSIGN, MINUSASSIGN, TIMESASSIGN, DIVIDEASSIGN,
-    #     LT, GT, LE, GE, NE, EQ,
-    #     LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE,
-    #     RANGE, TRANSPOSE, COMMA, SEMICOLON,
-    #     IF, ELSE, FOR, WHILE, BREAK, CONTINUE, RETURN, EYE, ZEROS, ONES, PRINT,
-    #     ID, FLOAT, INT, STRING
-    # }
+
     tokens = {
         LE, GE, LT, GT, NE, EQ, # compare operators
         ASSIGN, PLUSASSIGN, MINUSASSIGN, TIMESASSIGN, DIVIDEASSIGN, # assign operators
         DOTPLUS, DOTMINUS, DOTTIMES, DOTDIVIDE, # dot operators
-        LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE, # brackets
-        PLUS, MINUS, TIMES, DIVIDE, # binary operators
         RANGE, TRANSPOSE, COMMA, SEMICOLON, # other
         ID, # ids
         IF, ELSE, FOR, WHILE, BREAK, CONTINUE, RETURN, EYE, ZEROS, ONES, PRINT, TRUE, FALSE, IN, FUNCTION,  # keywords
         FLOAT, INT, STRING,  # explicit value declarations
     }
+
+    literals = {'+', '-', '*', '/', '(', ')', '{', '}', '[', ']'}
 
     # Ignored
     ignore = ' \t'
@@ -49,20 +41,6 @@ class Scanner(Lexer):
     DOTTIMES = r'\.\*'
     DOTDIVIDE = r'\./'
 
-    # brackets
-    LPAREN = r'\('
-    RPAREN = r'\)'
-    LBRACKET = r'\['
-    RBRACKET = r'\]'
-    LBRACE = r'\{'
-    RBRACE = r'\}'
-
-    # binary operators
-    PLUS = r'\+'
-    MINUS = r'-'
-    TIMES = r'\*'
-    DIVIDE = r'/'
-
     # other
     RANGE = r':'
     TRANSPOSE = r'\''
@@ -88,9 +66,8 @@ class Scanner(Lexer):
     ID['function'] = FUNCTION
 
     # explicit value declarations
-
-    FLOAT = r'[-+]?[0-9]+\.[0-9]*([eE][-+]?[0-9]+)?|\.[0-9]+([eE][-+]?[0-9]+)?|[-+]?\d+([eE][-][0-9]+)'
-    INT = r'[-+]?\d+([eE][+]?[0-9]+)?'
+    FLOAT = r'(([0-9]+\.[0-9]*)|(\.[0-9]+))([eE][-+]?[0-9]+)?|\d+([eE][-+]?[0-9]+)'
+    INT = r'\d+'
     STRING = r'\".*?\"'
 
     @_(r'\n+')
@@ -101,7 +78,7 @@ class Scanner(Lexer):
 if __name__ == '__main__':
 
     try:
-        filename = sys.argv[1] if len(sys.argv) > 1 else "extensive_example.txt"
+        filename = sys.argv[1] if len(sys.argv) > 1 else "testing_numeric_types.txt"
         file = open(filename, "r")
     except IOError:
         print("Cannot open {0} file".format(filename))
