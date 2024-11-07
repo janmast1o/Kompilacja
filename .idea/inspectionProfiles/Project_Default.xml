@@ -4,10 +4,20 @@
     <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="ignoredErrors">
         <list>
+<<<<<<< HEAD
           <option value="E303" />
           <option value="E741" />
           <option value="E501" />
           <option value="E211" />
+=======
+          <option value="E231" />
+          <option value="E211" />
+          <option value="E303" />
+          <option value="W292" />
+          <option value="E501" />
+          <option value="E731" />
+          <option value="E261" />
+>>>>>>> 3f365338ed1c38dca33c456028953c3fad04202c
         </list>
       </option>
     </inspection_tool>
