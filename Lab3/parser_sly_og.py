@@ -15,7 +15,7 @@ class Mparser(Parser):
         ('left', '+', '-', DOTPLUS, DOTMINUS),
         ('left', '*', '/', DOTTIMES, DOTDIVIDE),
         ('nonassoc', "'"),
-        # ('right', UMINUS)
+        ('right', UMINUS)
     )
 
     @_('instructions instruction',
@@ -26,14 +26,14 @@ class Mparser(Parser):
         return AST.InstructionsNode(p[0].instructions + [p[1]])
 
     @_('"{" instructions "}"',
-   'if_instruction',
-   'while_instruction',
-   'for_instruction',
-   'full_line_expression',
-   'print_instruction',
-   'BREAK ";"',
-   'CONTINUE ";"',
-   'RETURN right_hand_side_expression ";"')
+       'if_instruction',
+       'while_instruction',
+       'for_instruction',
+       'assign_expression',
+       'print_instruction',
+       'BREAK ";"',
+       'CONTINUE ";"',
+       'RETURN expression ";"')
     def instruction(self, p):
         if len(p) == 1:
             return p[0]
@@ -46,15 +46,13 @@ class Mparser(Parser):
         elif len(p) == 3:
             return p[1]
 
-
     @_('IF "(" relation_expression ")" instruction ELSE instruction',
-   'IF "(" relation_expression ")" instruction %prec IFX')
+       'IF "(" relation_expression ")" instruction %prec IFX')
     def if_instruction(self, p):
         if len(p) == 7:
             return AST.IfElseNode(p[2], p[4], p[6])
         else:
             return AST.IfElseNode(p[2], p[4], None)
-
 
     @_('WHILE "(" relation_expression ")" instruction')
     def while_instruction(self, p):
@@ -65,7 +63,7 @@ class Mparser(Parser):
         return AST.ForNode(p.ID, p.id_int0, p.id_int1, p.instruction)
 
     @_('ID',
-    'INTNUM')
+       'INTNUM')
     def id_int(self, p):
         try:
             if (p.INTNUM):
@@ -78,19 +76,9 @@ class Mparser(Parser):
         except:
             pass
 
-
-    @_('PRINT printables ";"')
+    @_('PRINT value ";"')
     def print_instruction(self, p):
-        return AST.PrintableNode([p[1]])
-
-    @_('printables "," value',
-       'value')
-    def printables(self, p):
-        if len(p) == 3:
-            return AST.ListOfPrintablesNode(p[0].values + [p[2]])
-        else:
-            return AST.ListOfPrintablesNode([p[0]])
-
+        return AST.PrintNode(p[1])
 
     @_('INTNUM',
        'FLOATNUM',
@@ -120,74 +108,70 @@ class Mparser(Parser):
 
         return None
 
-    # @_("unary_minus")
-    # def expression(self, p):
-    #     return p[0]
-    #
-    # @_('"-" expression %prec UMINUS')
-    # def unary_minus(self, p):
-    #     return AST.UnaryMinusNode(p[1])
+    @_("unary_minus")
+    def expression(self, p):
+        return p[0]
 
-    @_('right_hand_side_expression',
+    @_('"-" expression %prec UMINUS')
+    def unary_minus(self, p):
+        return AST.UnaryMinusNode(p[1])
+
+    @_('"[" vectors "]"')
+    def expression(self, p):
+        return AST.MatrixNode(p[1])
+
+    @_('value',
        'assign_expression',
-       'left_hand_side_expression',
-       '"(" full_line_expression ")"')
-    def full_line_expression(self, p):
-        if len(p) > 1:
-            return AST.ExpressionNode(p[1])
-        else:
-            return AST.ExpressionNode(p[0])
-
-    @_('relation_expression',
-       '"(" right_hand_side_expression ")"',
+       'relation_expression',
        'matrix_functions',
-       'value',
-       'right_hand_side_expression "\'"')
-    def right_hand_side_expression(self, p):
+       'matrix_ref',
+       'UMINUS expression',
+       '"(" expression ")"',
+       'expression "\'"')
+    def expression(self, p):
         if len(p) == 1:
             return AST.ExpressionNode(p[0])
-        elif p[1] == "'":
+
+        try:
+            if (p.UMINUS):
+                return AST.UnaryMinusNode(p[1])
+        except:
+            pass
+
+        if p[1] == "'":
             return AST.TransposeNode(p[0])
 
         return AST.ExpressionNode(p[1])
 
-    @_('right_hand_side_expression "+" right_hand_side_expression',
-       'right_hand_side_expression "-" right_hand_side_expression',
-       'right_hand_side_expression "*" right_hand_side_expression',
-       'right_hand_side_expression "/" right_hand_side_expression',
-       'right_hand_side_expression DOTPLUS right_hand_side_expression',
-       'right_hand_side_expression DOTMINUS right_hand_side_expression',
-       'right_hand_side_expression DOTTIMES right_hand_side_expression',
-       'right_hand_side_expression DOTDIVIDE right_hand_side_expression')
-    def right_hand_side_expression(self, p):
+    @_('expression "+" expression',
+       'expression "-" expression',
+       'expression "*" expression',
+       'expression "/" expression')
+    def expression(self, p):
         return AST.BinExpr(p[1], p[0], p[2])
 
-    @_('"[" vectors "]"')
-    def right_hand_side_expression(self, p):
-        return AST.MatrixNode(p[1])
+    @_('expression DOTPLUS expression',
+       'expression DOTMINUS expression',
+       'expression DOTTIMES expression',
+       'expression DOTDIVIDE expression')
+    def expression(self, p):
+        return AST.BinExpr(p[1], p[0], p[2])
 
-    @_('"[" list_of_elems "]"',
-       '"[" "]"')
-    def right_hand_side_expression(self, p):
-        if len(p) == 2:
-            return AST.EmptyNode()
-        return AST.VectorsNode([p[1]])
-
-    @_('left_hand_side_expression "=" right_hand_side_expression ";"',
-       'left_hand_side_expression PLUSASSIGN right_hand_side_expression ";"',
-       'left_hand_side_expression MINUSASSIGN right_hand_side_expression ";"',
-       'left_hand_side_expression TIMESASSIGN right_hand_side_expression ";"',
-       'left_hand_side_expression DIVIDEASSIGN right_hand_side_expression ";"')
+    @_('id_ref "=" expression ";"',
+       'id_ref PLUSASSIGN expression ";"',
+       'id_ref MINUSASSIGN expression ";"',
+       'id_ref TIMESASSIGN expression ";"',
+       'id_ref DIVIDEASSIGN expression ";"', )
     def assign_expression(self, p):
         return AST.AssignExpression(p[0], p[1], p[2])
 
     @_('ID "[" list_of_ints "]"')
     def matrix_ref(self, p):
         return AST.MatrixRefNode(p[0], p[2])
-    
+
     @_('ID',
        'matrix_ref')
-    def left_hand_side_expression(self, p):
+    def id_ref(self, p):
         try:
             if (p.matrix_ref):
                 return p[0]
@@ -196,12 +180,12 @@ class Mparser(Parser):
 
         return AST.IDRefNode(p[0])
 
-    @_('right_hand_side_expression LT right_hand_side_expression',
-       'right_hand_side_expression GT right_hand_side_expression',
-       'right_hand_side_expression LE right_hand_side_expression',
-       'right_hand_side_expression GE right_hand_side_expression',
-       'right_hand_side_expression EQ right_hand_side_expression',
-       'right_hand_side_expression NE right_hand_side_expression',)
+    @_('expression LT expression',
+       'expression GT expression',
+       'expression LE expression',
+       'expression GE expression',
+       'expression EQ expression',
+       'expression NE expression', )
     def relation_expression(self, p):
         return AST.RelationExpression(p[1], p[0], p[2])
 
@@ -218,23 +202,13 @@ class Mparser(Parser):
         elif function == 'eye':
             return AST.EyeNode(function, p[2])
 
-    @_('"[" list_of_elems "]"',
-       'vectors "," "[" list_of_elems "]"',
-       '"[" "]"')
+    @_('"[" list_of_ints "]"',
+       'vectors "," "[" list_of_ints "]"')
     def vectors(self, p):
         if len(p) == 3:
             return AST.VectorsNode([p[1]])
-        elif len(p) == 5:
-            return AST.VectorsNode(p[0].values+[p[3]])
-        return AST.VectorsNode([])
 
-    @_('value',
-       'list_of_elems "," value')
-    def list_of_elems(self, p):
-        if len(p) == 1:
-            return AST.ListOfElemsNode([p[0]])
-        else:
-            return AST.ListOfElemsNode(p[0].values + [p[2]])
+        return AST.VectorsNode(p[0].values + [p[3]])
 
     @_('INTNUM',
        'list_of_ints "," INTNUM')
@@ -243,4 +217,3 @@ class Mparser(Parser):
             return AST.ListOfElemsNode([p[0]])
         else:
             return AST.ListOfElemsNode(p[0].values + [p[2]])
-

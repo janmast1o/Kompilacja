@@ -5,6 +5,10 @@ class InstructionsNode(Node):
     def __init__(self, instructions):
         self.instructions = instructions
 
+class EmptyNode(Node):
+    def __init__(self):
+        self.value = "EMPTY"
+
 class InstructionNode(Node):
     def __init__(self, instruction):
         self.instruction = instruction
@@ -26,13 +30,22 @@ class IntNum(Node):
     def __init__(self, value):
         self.value = value
 
+    def __str__(self):
+        return str(self.value)
+
 class FloatNum(Node):
     def __init__(self, value):
         self.value = value
 
+    def __str__(self):
+        return str(self.value)
+
 class IDNode(Node):
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
 
 class WhileNode:
     def __init__(self, condition, body):
@@ -61,6 +74,9 @@ class AssignExpression(Node):
 class Variable(Node):
     def __init__(self, name):
         self.name = name
+
+    def __str__(self):
+        return str(self.value)
 
 
 class BinExpr(Node):
@@ -98,13 +114,21 @@ class IDRefNode(Node):
     def __init__(self, value):
         self.value = value
 
+class PrintableNode(Node):
+    def __init__(self, values):
+        self.values = values
+
 class PrintNode(Node):
     def __init__(self, value):
         self.value = value
 
-class ListOfIntsNode(Node):
+class ListOfElemsNode(Node):
     def __init__(self, values):
-        self.values = values     
+        self.values = values
+
+class ListOfPrintablesNode(Node):
+    def __init__(self, values):
+        self.values = values
 
 class ExpressionNode(Node):
     def __init__(self, expr):
