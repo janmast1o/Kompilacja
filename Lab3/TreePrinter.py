@@ -90,17 +90,6 @@ class TreePrinter:
         print(f"{'|  ' * indent}REF")
         print(f"{'|  ' * (indent + 1)}{self.id}")
         self.values.printTree(indent)
-
-    @addToClass(AST.ListOfIndicesNode)
-    def printTree(self, indent=0):
-        indentation = "|  " * indent
-        print(f"{indentation}ListOfIndices:")
-        for value in self.values:
-            if isinstance(value, AST.Node):  # Jeśli to węzeł AST, wywołaj jego printTree
-                value.printTree(indent + 1)
-            else:
-                print(f"{indentation}|  {value}")  # Wypisz wartość, jeśli to nie węzeł
-    
         
     @addToClass(AST.IntNum)
     def printTree(self, indent=0):
