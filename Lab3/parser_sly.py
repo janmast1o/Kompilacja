@@ -173,6 +173,10 @@ class Mparser(Parser):
             return AST.EmptyNode()
         return AST.VectorsNode([p[1]])
 
+    @_('matrix_ref')
+    def right_hand_side_expression(self, p):
+        return p[0]
+
     @_('left_hand_side_expression "=" right_hand_side_expression ";"',
        'left_hand_side_expression PLUSASSIGN right_hand_side_expression ";"',
        'left_hand_side_expression MINUSASSIGN right_hand_side_expression ";"',
@@ -226,7 +230,12 @@ class Mparser(Parser):
             return AST.VectorsNode([p[1]])
         elif len(p) == 5:
             return AST.VectorsNode(p[0].values+[p[3]])
-        return AST.VectorsNode([])
+        return AST.EmptyNode()
+
+    @_('vectors "," "[" "]" ')
+    def vectors(self, p):
+        return AST.VectorsNode(p[0].values + [AST.EmptyNode()])
+
 
     @_('value',
        'list_of_elems "," value')
