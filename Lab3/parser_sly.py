@@ -15,7 +15,7 @@ class Mparser(Parser):
         ('left', '+', '-', DOTPLUS, DOTMINUS),
         ('left', '*', '/', DOTTIMES, DOTDIVIDE),
         ('nonassoc', "'"),
-        # ('right', UMINUS)
+        ('right', UMINUS)
     )
 
     @_('instructions instruction',
@@ -120,13 +120,13 @@ class Mparser(Parser):
 
         return None
 
-    # @_("unary_minus")
-    # def expression(self, p):
-    #     return p[0]
-    #
-    # @_('"-" expression %prec UMINUS')
-    # def unary_minus(self, p):
-    #     return AST.UnaryMinusNode(p[1])
+    @_("unary_minus")
+    def expression(self, p):
+        return p[0]
+    
+    @_('"-" expression %prec UMINUS')
+    def unary_minus(self, p):
+        return AST.UnaryMinusNode(p[1])
 
     @_('right_hand_side_expression',
        'assign_expression',
