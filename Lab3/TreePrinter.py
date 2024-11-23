@@ -23,7 +23,7 @@ class TreePrinter:
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}EMPTY VECTOR")
 
-    @addToClass(AST.AssignExpression)
+    @addToClass(AST.AssignInstruction)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}{self.operator}")
         self.left.printTree(indent + 1)
@@ -101,8 +101,8 @@ class TreePrinter:
         
     @addToClass(AST.UnaryMinusNode)
     def printTree(self, indent=0):
-        print(f"{'|  ' * indent}-")
-        self.expr.printTree(indent)
+        print(f"{'|  ' * indent}-", end="")
+        self.expr.printTree()
         
     @addToClass(AST.IDNode)
     def printTree(self, indent=0):

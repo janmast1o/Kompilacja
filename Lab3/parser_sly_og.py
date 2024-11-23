@@ -163,7 +163,7 @@ class Mparser(Parser):
        'id_ref TIMESASSIGN expression ";"',
        'id_ref DIVIDEASSIGN expression ";"', )
     def assign_expression(self, p):
-        return AST.AssignExpression(p[0], p[1], p[2])
+        return AST.AssignInstruction(p[0], p[1], p[2])
 
     @_('ID "[" list_of_ints "]"')
     def matrix_ref(self, p):

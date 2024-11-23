@@ -65,7 +65,7 @@ class IfElseNode:
         self.if_body = if_body
         self.else_body = else_body
 
-class AssignExpression(Node):
+class AssignInstruction(Node):
     def __init__(self, left, operator, right):
         self.left = left
         self.operator = operator
