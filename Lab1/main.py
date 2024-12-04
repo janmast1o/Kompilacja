@@ -25,6 +25,7 @@ class Scanner(Lexer):
         BREAK, CONTINUE, RETURN,
         EYE, ZEROS, ONES,
         PRINT,
+        UMINUS,
         # IDs, numbers and string
         ID, FLOATNUM, INTNUM, STRING
     ]
@@ -90,3 +91,18 @@ class Scanner(Lexer):
     def error(self, t):
         print(f'Incorrect sign: {t.value[0]} in line: {self.lineno}')
         self.index += 1
+
+
+if __name__ == "__main__":
+    try:
+        filename = sys.argv[1] if len(sys.argv) > 1 else "testing_strings_and_keywords.txt"
+        file = open(filename, "r")
+    except IOError:
+        print("Cannot open {0} file".format(filename))
+        sys.exit(0)
+
+    text = file.read()
+    lexer = Scanner()
+
+    for tok in lexer.tokenize(text):
+        print(tok)
