@@ -1,12 +1,14 @@
 from __future__ import print_function
 import AST
 
-def addToClass(cls):
 
+def addToClass(cls):
     def decorator(func):
-        setattr(cls,func.__name__,func)
+        setattr(cls, func.__name__, func)
         return func
+
     return decorator
+
 
 class TreePrinter:
 
@@ -72,33 +74,40 @@ class TreePrinter:
 
     @addToClass(AST.ListOfPrintablesNode)
     def printTree(self, indent=0):
+        # for value in self.values:
+        #     print(f"{'|  ' * (indent + 1)}{value}")
+
         for value in self.values:
-            print(f"{'|  ' * (indent + 1)}{value}")
+            value.printTree(indent + 1)
 
     @addToClass(AST.Variable)
     def printTree(self, indent=0):
         if self.index is not None:
             print(f"{'|  ' * indent}REF")
-            self.name.printTree(indent+1)
+            self.name.printTree(indent + 1)
             for e in self.index:
-                e.printTree(indent+1)
-        
+                e.printTree(indent + 1)
+
     @addToClass(AST.IntNum)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}{self.value}")
-        
+
     @addToClass(AST.FloatNum)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}{self.value}")
-        
+
     @addToClass(AST.UnaryMinusNode)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}-", end="")
         self.expr.printTree()
-        
+
     @addToClass(AST.IDNode)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}{self.value}")
+
+    @addToClass(AST.String)
+    def printTree(self, indent=0):
+        print(f"{'|  ' * indent}{self.name}")
 
     @addToClass(AST.TransposeNode)
     def printTree(self, indent=0):
@@ -119,34 +128,34 @@ class TreePrinter:
         self.start.printTree(indent + 2)
         self.end.printTree(indent + 2)
         self.body.printTree(indent + 1)
-        
+
     @addToClass(AST.WhileNode)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}WHILE")
-        self.condition.printTree(indent+1)
+        self.condition.printTree(indent + 1)
         self.body.printTree(indent + 1)
 
     @addToClass(AST.IfElseNode)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}IF")
-        self.condition.printTree(indent+1)
+        self.condition.printTree(indent + 1)
         print(f"{'|  ' * indent}THEN")
         self.if_body.printTree(indent + 1)
 
-        if(self.else_body == None):
+        if (self.else_body == None):
             return
-        
+
         print(f"{'|  ' * indent}ELSE")
         self.else_body.printTree(indent + 1)
 
     @addToClass(AST.ReturnInstruction)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}RETURN")
-        self.expr.printTree(indent+1)
+        self.expr.printTree(indent + 1)
 
     @addToClass(AST.Error)
     def printTree(self, indent=0):
-        pass    
+        pass
         # fill in the body
 
 

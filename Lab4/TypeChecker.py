@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from collections import defaultdict
 import AST
+from SymbolTable import SymbolTable
 
 dict_of_types = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: "")))
 
@@ -127,16 +128,50 @@ class NodeVisitor(object):
 
 
 class TypeChecker(NodeVisitor):
+    def __init__(self):
+        self.symbol_table = SymbolTable()
 
     def visit_BinExpr(self, node):
-                                          # alternative usage,
-                                          # requires definition of accept method in class Node
-        type1 = self.visit(node.left)     # type1 = node.left.accept(self) 
-        type2 = self.visit(node.right)    # type2 = node.right.accept(self)
-        op    = node.op
-        # ... 
-        #
- 
+        # alternative usage,
+        # requires definition of accept method in class Node
+        # type1 = node.left.accept(self)
+        # type2 = node.right.accept(self)
+        type1 = self.visit(node.left)
+        type2 = self.visit(node.right)
+        op = node.op
+        result_type = dict[op][type1][type2]
+        if result_type == "":
+            raise Exception(f"Cannot apply operator {op} to types {type1}, {type2}")
+
+        return result_type
+
+
+    def visit_RelationExpression(self, node):
+        type1 = self.visit(node.left)
+        type2 = self.visit(node.right)
+        op = node.op
+        result_type = dict[op][type1][type2]
+        if result_type == "":
+            raise Exception(f"Cannot apply operator {op} to types {type1}, {type2}")
+
+        return result_type
+
+
+    def visit_IntNum(self, node):
+        return "int"
+
+
+    def visit_FloatNum(self, node):
+        return "float"
+
+
+    def visit_String(self, node):
+        return "str"
+
+
+    def visit_IDNode(self, node):
+        symbol =
+
 
     def visit_Variable(self, node):
         pass

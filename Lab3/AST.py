@@ -76,6 +76,9 @@ class Variable(Node):
         self.name = name
         self.index = index
 
+    # def __str__(self):
+    #     return f"{self.name}{self.index}"
+
 class BinExpr(Node):
     def __init__(self, op, left, right):
         self.op = op

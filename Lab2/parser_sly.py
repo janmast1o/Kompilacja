@@ -163,7 +163,7 @@ class Mparser(Parser):
 
     def error(self, p):
         if p:
-            print("Syntax error at line {0}: LexToken({1}, '{2}')".format(p.lineno, p.type, p.value))
+            print("Syntax error at line {0}: LexToken({1}, '{2}')".format(p.lineno, p.symbol_type, p.value))
         else:
             print("Unexpected end of input")
 

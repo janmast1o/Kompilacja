@@ -72,8 +72,11 @@ class TreePrinter:
 
     @addToClass(AST.ListOfPrintablesNode)
     def printTree(self, indent=0):
+        # for value in self.values:
+        #     print(f"{'|  ' * (indent + 1)}{value}")
+
         for value in self.values:
-            print(f"{'|  ' * (indent + 1)}{value}")
+            value.printTree(indent+1)
 
     @addToClass(AST.Variable)
     def printTree(self, indent=0):
@@ -99,6 +102,10 @@ class TreePrinter:
     @addToClass(AST.IDNode)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}{self.value}")
+
+    @addToClass(AST.String)
+    def printTree(self, indent=0):
+        print(f"{'|  ' * indent}{self.name}")
 
     @addToClass(AST.TransposeNode)
     def printTree(self, indent=0):
