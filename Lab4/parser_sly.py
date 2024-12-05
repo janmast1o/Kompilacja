@@ -117,11 +117,25 @@ class Mparser(Parser):
         else:
             return AST.ExpressionNode(p[0])
 
+    # @_('relation_expression',
+    #    '"(" right_hand_side_expression ")"',
+    #    'matrix_functions',
+    #    'value',
+    #    'right_hand_side_expression "\'"')
+    # def right_hand_side_expression(self, p):
+    #     if len(p) == 1:
+    #         return AST.ExpressionNode(p[0])
+    #     elif p[1] == "'":
+    #         return AST.TransposeNode(p[0])
+    #
+    #     return AST.ExpressionNode(p[1])
+
     @_('relation_expression',
        '"(" right_hand_side_expression ")"',
        'matrix_functions',
        'value',
-       'right_hand_side_expression "\'"')
+       'matrix_ref',
+       'matrix "\'"')
     def right_hand_side_expression(self, p):
         if len(p) == 1:
             return AST.ExpressionNode(p[0])
@@ -156,11 +170,19 @@ class Mparser(Parser):
        'ID TIMESASSIGN right_hand_side_expression ";"',
        'ID DIVIDEASSIGN right_hand_side_expression ";"')
     def assign_instruction(self, p):
-        return AST.AssignInstruction(AST.IDRefNode(p[0]), p[1], p[2])
+        return AST.AssignInstruction(AST.IDNode(p[0]), p[1], p[2])
     
-    @_('ID "[" variables "]"')
+    @_('ID "[" id_ints "]"')
     def matrix_ref(self, p):
         return AST.Variable(AST.IDNode(p[0]), p[2])
+
+    @_('id_ints "," id_int')
+    def id_ints(self, p):
+        return p[0] + [p[2]]
+
+    @_('id_int')
+    def id_ints(self, p):
+        return [p[0]]
 
     @_('matrix_ref')
     def printables(self, p):
@@ -187,19 +209,33 @@ class Mparser(Parser):
     def matrix_functions(self, p):
         return AST.EyeNode('eye', p[2])
 
-    @_('vector')
+    @_('vector',
+       'matrix')
     def right_hand_side_expression(self, p):
         return p[0]
+
+    # @_('matrix')
+    # def right_hand_side_expression(self, p):
+    #     return p[0]
 
     @_('"[" variables "]"')
     def vector(self, p):
         return AST.VectorNode(p[1])
+
+    @_('"[" vectors "]"')
+    def matrix(self, p):
+        return AST.MatrixNode(p[1])
+
+    @_('vectors "," vector',
+       'vector')
+    def vectors(self, p):
+        return p[0] + [p[2]] if len(p) == 3 else [p[0]]
     
     @_('"[" "]"')
     def vector(self, p):
-        return AST.EmptyNode()
+        return AST.VectorNode([])
 
-    @_('variables "," right_hand_side_expression',
-       'right_hand_side_expression')
+    @_('variables "," value',
+       'value')
     def variables(self, p):
         return p[0] + [p[2]] if len(p) == 3 else [p[0]]

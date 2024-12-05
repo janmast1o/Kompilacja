@@ -21,9 +21,9 @@ class TreePrinter:
         for instruction in self.instructions:
             instruction.printTree(indent)
 
-    @addToClass(AST.EmptyNode)
-    def printTree(self, indent=0):
-        print(f"{'|  ' * indent}EMPTY VECTOR")
+    # @addToClass(AST.EmptyNode)
+    # def printTree(self, indent=0):
+    #     print(f"{'|  ' * indent}EMPTY VECTOR")
 
     @addToClass(AST.AssignInstruction)
     def printTree(self, indent=0):
@@ -65,6 +65,12 @@ class TreePrinter:
         print(f"{'|  ' * indent}VECTOR")
         for value in self.values:
             value.printTree(indent + 1)
+
+    @addToClass(AST.MatrixNode)
+    def printTree(self, indent=0):
+        print(f"{'|   '*indent}MATRIX")
+        for vector in self.vectors:
+            vector.printTree(indent+1)
 
     @addToClass(AST.PrintableNode)
     def printTree(self, indent=0):

@@ -7,9 +7,9 @@ class InstructionsNode(Node):
         self.instructions = instructions
 
 
-class EmptyNode(Node):
-    def __init__(self):
-        self.value = "EMPTY"
+# class EmptyNode(Node):
+#     def __init__(self):
+#         self.value = "EMPTY"
 
 
 class BreakInstruction(Node):
@@ -159,6 +159,11 @@ class TransposeNode(Node):
 class VectorNode(Node):
     def __init__(self, values):
         self.values = values
+
+
+class MatrixNode(Node):
+    def __init__(self, vectors):
+        self.vectors = vectors
 
 
 class Error(Node):

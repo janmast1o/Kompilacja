@@ -2,12 +2,19 @@
 class Symbol:
     pass
 
-class VariableSymbol(Symbol):
 
-    def __init__(self, name, symbol_type):
+class Additional:
+    def __init__(self, size=None, stored_type=None):
+        self.size = size
+        self.stored_type = stored_type
+
+
+class VariableSymbol(Symbol):
+    def __init__(self, name, symbol_type, additional=None):
         super().__init__()
         self.name = name
         self.symbol_type = symbol_type
+        self.additional = additional
 
     def __str__(self):
         return f"Variable: {self.name}, of type: {self.symbol_type}"
