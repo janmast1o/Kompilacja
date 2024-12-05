@@ -1,7 +1,7 @@
 #!/usr/bin/python
 from collections import defaultdict
 import AST
-from SymbolTable import SymbolTable
+from SymbolTable import SymbolTable, Symbol, VariableSymbol
 
 dict_of_types = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: "")))
 
@@ -129,7 +129,17 @@ class NodeVisitor(object):
 
 class TypeChecker(NodeVisitor):
     def __init__(self):
-        self.symbol_table = SymbolTable()
+        self.current_symbol_table = SymbolTable()
+
+
+    def visit_InstructionsNode(self, node):
+        for instruction in node.instructions:
+            self.visit(instruction)
+
+
+    def visit_returnInstruction(self, node): # ??? 
+        ...        
+
 
     def visit_BinExpr(self, node):
         # alternative usage,
@@ -155,6 +165,53 @@ class TypeChecker(NodeVisitor):
             raise Exception(f"Cannot apply operator {op} to types {type1}, {type2}")
 
         return result_type
+    
+
+    def visit_WhileNode(self, node):
+        condition_type = self.visit(node.condition)
+        if condition_type != "bool":
+            raise Exception(f"There must be a bool expression in while condition, not {condition_type}")
+        
+        self.current_symbol_table = self.current_symbol_table.pushScope("loop body")
+        self.visit(node.body)
+
+
+    def visit_ForNode(self, node):
+        start_type = self.visit(node.start)
+        end_type = self.visit(node.end)
+        if start_type != "int":
+            raise Exception(f"Start in for loop condition must be of type int, not: {start_type}")
+        elif end_type != "int":
+            raise Exception(f"End in for loop condition must be of type int, not: {start_type}")
+
+        self.current_symbol_table = self.current_symbol_table.pushScope("loop body")
+        self.current_symbol_table.put(node.variable, VariableSymbol(node.variable, "int"))
+        self.visit(node.body)
+
+
+    def visit_BreakInstruction(self, node):  
+        if not self.current_symbol_table.st_name == "loop body":
+            raise Exception("Cannot run break outside of loop")
+        self.current_symbol_table = self.current_symbol_table.popScope()
+
+
+    def visit_ContinueInstruction(self, node):
+        if not self.current_symbol_table.st_name == "loop body":
+            raise Exception("Cannot run break outside of loop")  
+
+
+    def visit_IfElseNode(self, node):
+        condition_type = self.visit(node.condition)
+        if not condition_type == "bool":
+            raise Exception(f"There must be a bool expression in the if condition, not {condition_type}")      
+
+        self.current_symbol_table = self.current_symbol_table.pushScope("if body")
+        self.visit(node.if_body)
+        self.current_symbol_table = self.current_symbol_table.popScope()
+
+        self.current_symbol_table = self.current_symbol_table.pushScope("else body")
+        self.visit(node.else_body)
+        self.current_symbol_table = self.current_symbol_table.pop()
 
 
     def visit_IntNum(self, node):
@@ -170,7 +227,11 @@ class TypeChecker(NodeVisitor):
 
 
     def visit_IDNode(self, node):
-        symbol =
+        symbol = self.current_symbol_table.get(node.value)
+        if symbol is None:
+            raise Exception(f"Cannot resolve reference to: {node.name}")
+        
+        return symbol.symbol_type
 
 
     def visit_Variable(self, node):
