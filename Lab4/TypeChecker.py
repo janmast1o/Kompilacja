@@ -422,6 +422,38 @@ class TypeChecker(NodeVisitor):
 
 
     def visit_VectorNode(self, node: AST.VectorNode):
+        negotiated_type = ""
+        for element in node.values:
+            previous_type = negotiated_type
+            element_type = self.visit(element)
+            negotiated_type = negotiate_type(negotiated_type, element_type)
+            
+            if negotiated_type == "":
+                raise Exception(f"Attempting to store values of types: {previous_type} and {element_type} in vector")
+            
+        return "vector", Additional(len(self.values), negotiate_type)
+
+
+    def visit_MatrixNode(self, node: AST.MatrixNode):
+        rows = len(node.vectors)
+        # print(type(node.vectors[0]))
+        columns = len(node.vectors[0].values)
+        matrix_type = "any"
+        for i in range (1,rows):
+            vector_type, add = self.visit(node.vectors[i])
+            if add.size[0] != columns:
+                raise Exception(f"Attempting to initalize matrix with vectors of different lengths: {columns} and {add.size[0]}")
+            
+            matrix_type = negotiate_type(matrix_type, add.stored_type)
+            if matrix_type == "":
+                print(matrix_type)
+                raise Exception(f"Attempting to initialize a matrix with values of incompatible types")
+            
+        return "matrix", Additional((rows, columns), matrix_type)
+
+
+    def visit_ErrorNode(self, node: AST.Error):
+        raise Exception("Error node")    
 
 
 
