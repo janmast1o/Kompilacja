@@ -65,28 +65,25 @@ Rule 61    relation_expression -> right_hand_side_expression GE right_hand_side_
 Rule 62    relation_expression -> right_hand_side_expression LE right_hand_side_expression  [precedence=nonassoc, level=3]
 Rule 63    relation_expression -> right_hand_side_expression GT right_hand_side_expression  [precedence=nonassoc, level=3]
 Rule 64    relation_expression -> right_hand_side_expression LT right_hand_side_expression  [precedence=nonassoc, level=3]
-Rule 65    matrix_functions -> EYE ( id_int , id_int )
-Rule 66    matrix_functions -> EYE ( id_int )
-Rule 67    matrix_functions -> ONES ( id_int , id_int )
-Rule 68    matrix_functions -> ONES ( id_int )
-Rule 69    matrix_functions -> ZEROS ( id_int , id_int )
-Rule 70    matrix_functions -> ZEROS ( id_int )
-Rule 71    vector -> [ ]
-Rule 72    vector -> [ variables ]
-Rule 73    matrix -> [ vectors ]
-Rule 74    vectors -> vector
-Rule 75    vectors -> vectors , vector
-Rule 76    variables -> value
-Rule 77    variables -> variables , value
+Rule 65    matrix_functions -> EYE ( id_int )
+Rule 66    matrix_functions -> ONES ( id_int )
+Rule 67    matrix_functions -> ZEROS ( id_int )
+Rule 68    vector -> [ ]
+Rule 69    vector -> [ variables ]
+Rule 70    matrix -> [ vectors ]
+Rule 71    vectors -> vector
+Rule 72    vectors -> vectors , vector
+Rule 73    variables -> value
+Rule 74    variables -> variables , value
 
 Terminals, with rules where they appear:
 
 '                    : 36
-(                    : 12 13 14 40 44 65 66 67 68 69 70
-)                    : 12 13 14 40 44 65 66 67 68 69 70
+(                    : 12 13 14 40 44 65 66 67
+)                    : 12 13 14 40 44 65 66 67
 *                    : 33
 +                    : 35
-,                    : 21 58 65 67 69 75 77
+,                    : 21 58 72 74
 -                    : 34 43
 /                    : 32
 :                    : 15
@@ -101,7 +98,7 @@ DOTPLUS              : 31
 DOTTIMES             : 29
 ELSE                 : 13
 EQ                   : 60
-EYE                  : 65 66
+EYE                  : 65
 FLOATNUM             : 24
 FOR                  : 15
 GE                   : 61
@@ -113,16 +110,16 @@ LE                   : 62
 LT                   : 64
 MINUSASSIGN          : 48 53
 NE                   : 59
-ONES                 : 67 68
+ONES                 : 66
 PLUSASSIGN           : 49 54
 PRINT                : 18
 RETURN               : 3
 STRING               : 22
 TIMESASSIGN          : 47 52
 WHILE                : 14
-ZEROS                : 69 70
-[                    : 56 71 72 73
-]                    : 56 71 72 73
+ZEROS                : 67
+[                    : 56 68 69 70
+]                    : 56 68 69 70
 error                : 
 {                    : 6
 }                    : 6
@@ -132,7 +129,7 @@ Nonterminals, with rules where they appear:
 assign_instruction   : 45
 for_instruction      : 9
 full_line_instruction : 8 44
-id_int               : 15 15 57 58 65 65 66 67 67 68 69 69 70
+id_int               : 15 15 57 58 65 66 67
 id_ints              : 56 58
 if_instruction       : 11
 instruction          : 1 2 12 13 13 14 15
@@ -145,10 +142,10 @@ printables           : 18 21
 relation_expression  : 12 13 14 41
 right_hand_side_expression : 3 28 28 29 29 30 30 31 31 32 32 33 33 34 34 35 35 40 43 46 47 48 49 50 51 52 53 54 55 59 59 60 60 61 61 62 62 63 63 64 64
 unary                : 42
-value                : 20 21 38 76 77
-variables            : 72 77
-vector               : 27 74 75
-vectors              : 73 75
+value                : 20 21 38 73 74
+variables            : 69 74
+vector               : 27 71 72
+vectors              : 70 72
 while_instruction    : 10
 
 
@@ -293,20 +290,17 @@ state 3
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -715,20 +709,17 @@ state 24
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -839,20 +830,17 @@ state 28
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -924,15 +912,15 @@ state 30
 
 state 31
 
-    (73) matrix -> [ . vectors ]
-    (71) vector -> [ . ]
-    (72) vector -> [ . variables ]
-    (74) vectors -> . vector
-    (75) vectors -> . vectors , vector
-    (76) variables -> . value
-    (77) variables -> . variables , value
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> [ . vectors ]
+    (68) vector -> [ . ]
+    (69) vector -> [ . variables ]
+    (71) vectors -> . vector
+    (72) vectors -> . vectors , vector
+    (73) variables -> . value
+    (74) variables -> . variables , value
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
@@ -1044,22 +1032,19 @@ state 35
 
 state 36
 
-    (65) matrix_functions -> EYE . ( id_int , id_int )
-    (66) matrix_functions -> EYE . ( id_int )
+    (65) matrix_functions -> EYE . ( id_int )
     (               shift and go to state 85
 
 
 state 37
 
-    (67) matrix_functions -> ONES . ( id_int , id_int )
-    (68) matrix_functions -> ONES . ( id_int )
+    (66) matrix_functions -> ONES . ( id_int )
     (               shift and go to state 86
 
 
 state 38
 
-    (69) matrix_functions -> ZEROS . ( id_int , id_int )
-    (70) matrix_functions -> ZEROS . ( id_int )
+    (67) matrix_functions -> ZEROS . ( id_int )
     (               shift and go to state 87
 
 
@@ -1205,20 +1190,17 @@ state 47
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1266,20 +1248,17 @@ state 48
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1327,20 +1306,17 @@ state 49
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1388,20 +1364,17 @@ state 50
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1449,20 +1422,17 @@ state 51
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1529,20 +1499,17 @@ state 53
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (43) unary -> . - right_hand_side_expression
     (               shift and go to state 28
     [               shift and go to state 31
@@ -1591,20 +1558,17 @@ state 54
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (43) unary -> . - right_hand_side_expression
     (               shift and go to state 28
     [               shift and go to state 31
@@ -1646,20 +1610,17 @@ state 55
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1707,20 +1668,17 @@ state 56
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1768,20 +1726,17 @@ state 57
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1829,20 +1784,17 @@ state 58
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1890,20 +1842,17 @@ state 59
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -1969,20 +1918,17 @@ state 61
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2030,20 +1976,17 @@ state 62
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2091,20 +2034,17 @@ state 63
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2152,20 +2092,17 @@ state 64
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2213,20 +2150,17 @@ state 65
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2274,20 +2208,17 @@ state 66
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2335,20 +2266,17 @@ state 67
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2396,20 +2324,17 @@ state 68
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2457,20 +2382,17 @@ state 69
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2518,20 +2440,17 @@ state 70
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2579,20 +2498,17 @@ state 71
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2640,20 +2556,17 @@ state 72
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2701,20 +2614,17 @@ state 73
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2762,20 +2672,17 @@ state 74
     (40) right_hand_side_expression -> . ( right_hand_side_expression )
     (41) right_hand_side_expression -> . relation_expression
     (42) right_hand_side_expression -> . unary
-    (73) matrix -> . [ vectors ]
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (70) matrix -> . [ vectors ]
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     (56) matrix_ref -> . ID [ id_ints ]
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
     (25) value -> . INTNUM
-    (65) matrix_functions -> . EYE ( id_int , id_int )
-    (66) matrix_functions -> . EYE ( id_int )
-    (67) matrix_functions -> . ONES ( id_int , id_int )
-    (68) matrix_functions -> . ONES ( id_int )
-    (69) matrix_functions -> . ZEROS ( id_int , id_int )
-    (70) matrix_functions -> . ZEROS ( id_int )
+    (65) matrix_functions -> . EYE ( id_int )
+    (66) matrix_functions -> . ONES ( id_int )
+    (67) matrix_functions -> . ZEROS ( id_int )
     (59) relation_expression -> . right_hand_side_expression NE right_hand_side_expression
     (60) relation_expression -> . right_hand_side_expression EQ right_hand_side_expression
     (61) relation_expression -> . right_hand_side_expression GE right_hand_side_expression
@@ -2895,10 +2802,10 @@ state 77
 
 state 78
 
-    (71) vector -> [ . ]
-    (72) vector -> [ . variables ]
-    (76) variables -> . value
-    (77) variables -> . variables , value
+    (68) vector -> [ . ]
+    (69) vector -> [ . variables ]
+    (73) variables -> . value
+    (74) variables -> . variables , value
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
@@ -2914,55 +2821,55 @@ state 78
 
 state 79
 
-    (73) matrix -> [ vectors . ]
-    (75) vectors -> vectors . , vector
+    (70) matrix -> [ vectors . ]
+    (72) vectors -> vectors . , vector
     ]               shift and go to state 125
     ,               shift and go to state 126
 
 
 state 80
 
-    (71) vector -> [ ] .
-    ;               reduce using rule 71 (vector -> [ ] .)
-    DOTDIVIDE       reduce using rule 71 (vector -> [ ] .)
-    DOTTIMES        reduce using rule 71 (vector -> [ ] .)
-    DOTMINUS        reduce using rule 71 (vector -> [ ] .)
-    DOTPLUS         reduce using rule 71 (vector -> [ ] .)
-    /               reduce using rule 71 (vector -> [ ] .)
-    *               reduce using rule 71 (vector -> [ ] .)
-    -               reduce using rule 71 (vector -> [ ] .)
-    +               reduce using rule 71 (vector -> [ ] .)
-    NE              reduce using rule 71 (vector -> [ ] .)
-    EQ              reduce using rule 71 (vector -> [ ] .)
-    GE              reduce using rule 71 (vector -> [ ] .)
-    LE              reduce using rule 71 (vector -> [ ] .)
-    GT              reduce using rule 71 (vector -> [ ] .)
-    LT              reduce using rule 71 (vector -> [ ] .)
-    )               reduce using rule 71 (vector -> [ ] .)
-    ]               reduce using rule 71 (vector -> [ ] .)
-    ,               reduce using rule 71 (vector -> [ ] .)
+    (68) vector -> [ ] .
+    ;               reduce using rule 68 (vector -> [ ] .)
+    DOTDIVIDE       reduce using rule 68 (vector -> [ ] .)
+    DOTTIMES        reduce using rule 68 (vector -> [ ] .)
+    DOTMINUS        reduce using rule 68 (vector -> [ ] .)
+    DOTPLUS         reduce using rule 68 (vector -> [ ] .)
+    /               reduce using rule 68 (vector -> [ ] .)
+    *               reduce using rule 68 (vector -> [ ] .)
+    -               reduce using rule 68 (vector -> [ ] .)
+    +               reduce using rule 68 (vector -> [ ] .)
+    NE              reduce using rule 68 (vector -> [ ] .)
+    EQ              reduce using rule 68 (vector -> [ ] .)
+    GE              reduce using rule 68 (vector -> [ ] .)
+    LE              reduce using rule 68 (vector -> [ ] .)
+    GT              reduce using rule 68 (vector -> [ ] .)
+    LT              reduce using rule 68 (vector -> [ ] .)
+    )               reduce using rule 68 (vector -> [ ] .)
+    ]               reduce using rule 68 (vector -> [ ] .)
+    ,               reduce using rule 68 (vector -> [ ] .)
 
 
 state 81
 
-    (72) vector -> [ variables . ]
-    (77) variables -> variables . , value
+    (69) vector -> [ variables . ]
+    (74) variables -> variables . , value
     ]               shift and go to state 127
     ,               shift and go to state 128
 
 
 state 82
 
-    (74) vectors -> vector .
-    ]               reduce using rule 74 (vectors -> vector .)
-    ,               reduce using rule 74 (vectors -> vector .)
+    (71) vectors -> vector .
+    ]               reduce using rule 71 (vectors -> vector .)
+    ,               reduce using rule 71 (vectors -> vector .)
 
 
 state 83
 
-    (76) variables -> value .
-    ]               reduce using rule 76 (variables -> value .)
-    ,               reduce using rule 76 (variables -> value .)
+    (73) variables -> value .
+    ]               reduce using rule 73 (variables -> value .)
+    ,               reduce using rule 73 (variables -> value .)
 
 
 state 84
@@ -2975,8 +2882,7 @@ state 84
 
 state 85
 
-    (65) matrix_functions -> EYE ( . id_int , id_int )
-    (66) matrix_functions -> EYE ( . id_int )
+    (65) matrix_functions -> EYE ( . id_int )
     (16) id_int -> . ID
     (17) id_int -> . INTNUM
     ID              shift and go to state 98
@@ -2986,8 +2892,7 @@ state 85
 
 state 86
 
-    (67) matrix_functions -> ONES ( . id_int , id_int )
-    (68) matrix_functions -> ONES ( . id_int )
+    (66) matrix_functions -> ONES ( . id_int )
     (16) id_int -> . ID
     (17) id_int -> . INTNUM
     ID              shift and go to state 98
@@ -2997,8 +2902,7 @@ state 86
 
 state 87
 
-    (69) matrix_functions -> ZEROS ( . id_int , id_int )
-    (70) matrix_functions -> ZEROS ( . id_int )
+    (67) matrix_functions -> ZEROS ( . id_int )
     (16) id_int -> . ID
     (17) id_int -> . INTNUM
     ID              shift and go to state 98
@@ -4066,61 +3970,61 @@ state 124
 
 state 125
 
-    (73) matrix -> [ vectors ] .
-    '               reduce using rule 73 (matrix -> [ vectors ] .)
-    ;               reduce using rule 73 (matrix -> [ vectors ] .)
-    DOTDIVIDE       reduce using rule 73 (matrix -> [ vectors ] .)
-    DOTTIMES        reduce using rule 73 (matrix -> [ vectors ] .)
-    DOTMINUS        reduce using rule 73 (matrix -> [ vectors ] .)
-    DOTPLUS         reduce using rule 73 (matrix -> [ vectors ] .)
-    /               reduce using rule 73 (matrix -> [ vectors ] .)
-    *               reduce using rule 73 (matrix -> [ vectors ] .)
-    -               reduce using rule 73 (matrix -> [ vectors ] .)
-    +               reduce using rule 73 (matrix -> [ vectors ] .)
-    NE              reduce using rule 73 (matrix -> [ vectors ] .)
-    EQ              reduce using rule 73 (matrix -> [ vectors ] .)
-    GE              reduce using rule 73 (matrix -> [ vectors ] .)
-    LE              reduce using rule 73 (matrix -> [ vectors ] .)
-    GT              reduce using rule 73 (matrix -> [ vectors ] .)
-    LT              reduce using rule 73 (matrix -> [ vectors ] .)
-    )               reduce using rule 73 (matrix -> [ vectors ] .)
+    (70) matrix -> [ vectors ] .
+    '               reduce using rule 70 (matrix -> [ vectors ] .)
+    ;               reduce using rule 70 (matrix -> [ vectors ] .)
+    DOTDIVIDE       reduce using rule 70 (matrix -> [ vectors ] .)
+    DOTTIMES        reduce using rule 70 (matrix -> [ vectors ] .)
+    DOTMINUS        reduce using rule 70 (matrix -> [ vectors ] .)
+    DOTPLUS         reduce using rule 70 (matrix -> [ vectors ] .)
+    /               reduce using rule 70 (matrix -> [ vectors ] .)
+    *               reduce using rule 70 (matrix -> [ vectors ] .)
+    -               reduce using rule 70 (matrix -> [ vectors ] .)
+    +               reduce using rule 70 (matrix -> [ vectors ] .)
+    NE              reduce using rule 70 (matrix -> [ vectors ] .)
+    EQ              reduce using rule 70 (matrix -> [ vectors ] .)
+    GE              reduce using rule 70 (matrix -> [ vectors ] .)
+    LE              reduce using rule 70 (matrix -> [ vectors ] .)
+    GT              reduce using rule 70 (matrix -> [ vectors ] .)
+    LT              reduce using rule 70 (matrix -> [ vectors ] .)
+    )               reduce using rule 70 (matrix -> [ vectors ] .)
 
 
 state 126
 
-    (75) vectors -> vectors , . vector
-    (71) vector -> . [ ]
-    (72) vector -> . [ variables ]
+    (72) vectors -> vectors , . vector
+    (68) vector -> . [ ]
+    (69) vector -> . [ variables ]
     [               shift and go to state 78
 
     vector                         shift and go to state 148
 
 state 127
 
-    (72) vector -> [ variables ] .
-    ;               reduce using rule 72 (vector -> [ variables ] .)
-    DOTDIVIDE       reduce using rule 72 (vector -> [ variables ] .)
-    DOTTIMES        reduce using rule 72 (vector -> [ variables ] .)
-    DOTMINUS        reduce using rule 72 (vector -> [ variables ] .)
-    DOTPLUS         reduce using rule 72 (vector -> [ variables ] .)
-    /               reduce using rule 72 (vector -> [ variables ] .)
-    *               reduce using rule 72 (vector -> [ variables ] .)
-    -               reduce using rule 72 (vector -> [ variables ] .)
-    +               reduce using rule 72 (vector -> [ variables ] .)
-    NE              reduce using rule 72 (vector -> [ variables ] .)
-    EQ              reduce using rule 72 (vector -> [ variables ] .)
-    GE              reduce using rule 72 (vector -> [ variables ] .)
-    LE              reduce using rule 72 (vector -> [ variables ] .)
-    GT              reduce using rule 72 (vector -> [ variables ] .)
-    LT              reduce using rule 72 (vector -> [ variables ] .)
-    )               reduce using rule 72 (vector -> [ variables ] .)
-    ]               reduce using rule 72 (vector -> [ variables ] .)
-    ,               reduce using rule 72 (vector -> [ variables ] .)
+    (69) vector -> [ variables ] .
+    ;               reduce using rule 69 (vector -> [ variables ] .)
+    DOTDIVIDE       reduce using rule 69 (vector -> [ variables ] .)
+    DOTTIMES        reduce using rule 69 (vector -> [ variables ] .)
+    DOTMINUS        reduce using rule 69 (vector -> [ variables ] .)
+    DOTPLUS         reduce using rule 69 (vector -> [ variables ] .)
+    /               reduce using rule 69 (vector -> [ variables ] .)
+    *               reduce using rule 69 (vector -> [ variables ] .)
+    -               reduce using rule 69 (vector -> [ variables ] .)
+    +               reduce using rule 69 (vector -> [ variables ] .)
+    NE              reduce using rule 69 (vector -> [ variables ] .)
+    EQ              reduce using rule 69 (vector -> [ variables ] .)
+    GE              reduce using rule 69 (vector -> [ variables ] .)
+    LE              reduce using rule 69 (vector -> [ variables ] .)
+    GT              reduce using rule 69 (vector -> [ variables ] .)
+    LT              reduce using rule 69 (vector -> [ variables ] .)
+    )               reduce using rule 69 (vector -> [ variables ] .)
+    ]               reduce using rule 69 (vector -> [ variables ] .)
+    ,               reduce using rule 69 (vector -> [ variables ] .)
 
 
 state 128
 
-    (77) variables -> variables , . value
+    (74) variables -> variables , . value
     (22) value -> . STRING
     (23) value -> . ID
     (24) value -> . FLOATNUM
@@ -4134,26 +4038,20 @@ state 128
 
 state 129
 
-    (65) matrix_functions -> EYE ( id_int . , id_int )
-    (66) matrix_functions -> EYE ( id_int . )
-    ,               shift and go to state 150
-    )               shift and go to state 151
+    (65) matrix_functions -> EYE ( id_int . )
+    )               shift and go to state 150
 
 
 state 130
 
-    (67) matrix_functions -> ONES ( id_int . , id_int )
-    (68) matrix_functions -> ONES ( id_int . )
-    ,               shift and go to state 152
-    )               shift and go to state 153
+    (66) matrix_functions -> ONES ( id_int . )
+    )               shift and go to state 151
 
 
 state 131
 
-    (69) matrix_functions -> ZEROS ( id_int . , id_int )
-    (70) matrix_functions -> ZEROS ( id_int . )
-    ,               shift and go to state 154
-    )               shift and go to state 155
+    (67) matrix_functions -> ZEROS ( id_int . )
+    )               shift and go to state 152
 
 
 state 132
@@ -4166,7 +4064,7 @@ state 132
 state 133
 
     (15) for_instruction -> FOR ID = id_int . : id_int instruction
-    :               shift and go to state 156
+    :               shift and go to state 153
 
 
 state 134
@@ -4299,7 +4197,7 @@ state 140
     ID              shift and go to state 98
     INTNUM          shift and go to state 101
 
-    id_int                         shift and go to state 157
+    id_int                         shift and go to state 154
 
 state 141
 
@@ -4342,7 +4240,7 @@ state 141
     IF              shift and go to state 18
     ID              shift and go to state 16
 
-    instruction                    shift and go to state 158
+    instruction                    shift and go to state 155
     print_instruction              shift and go to state 7
     full_line_instruction          shift and go to state 8
     for_instruction                shift and go to state 9
@@ -4393,7 +4291,7 @@ state 142
     IF              shift and go to state 18
     ID              shift and go to state 16
 
-    instruction                    shift and go to state 159
+    instruction                    shift and go to state 156
     print_instruction              shift and go to state 7
     full_line_instruction          shift and go to state 8
     for_instruction                shift and go to state 9
@@ -4499,112 +4397,82 @@ state 147
 
 state 148
 
-    (75) vectors -> vectors , vector .
-    ]               reduce using rule 75 (vectors -> vectors , vector .)
-    ,               reduce using rule 75 (vectors -> vectors , vector .)
+    (72) vectors -> vectors , vector .
+    ]               reduce using rule 72 (vectors -> vectors , vector .)
+    ,               reduce using rule 72 (vectors -> vectors , vector .)
 
 
 state 149
 
-    (77) variables -> variables , value .
-    ]               reduce using rule 77 (variables -> variables , value .)
-    ,               reduce using rule 77 (variables -> variables , value .)
+    (74) variables -> variables , value .
+    ]               reduce using rule 74 (variables -> variables , value .)
+    ,               reduce using rule 74 (variables -> variables , value .)
 
 
 state 150
 
-    (65) matrix_functions -> EYE ( id_int , . id_int )
-    (16) id_int -> . ID
-    (17) id_int -> . INTNUM
-    ID              shift and go to state 98
-    INTNUM          shift and go to state 101
+    (65) matrix_functions -> EYE ( id_int ) .
+    ;               reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    DOTDIVIDE       reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    DOTTIMES        reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    DOTMINUS        reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    DOTPLUS         reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    /               reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    *               reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    -               reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    +               reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    NE              reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    EQ              reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    GE              reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    LE              reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    GT              reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    LT              reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
+    )               reduce using rule 65 (matrix_functions -> EYE ( id_int ) .)
 
-    id_int                         shift and go to state 160
 
 state 151
 
-    (66) matrix_functions -> EYE ( id_int ) .
-    ;               reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    DOTDIVIDE       reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    DOTTIMES        reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    DOTMINUS        reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    DOTPLUS         reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    /               reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    *               reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    -               reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    +               reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    NE              reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    EQ              reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    GE              reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    LE              reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    GT              reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    LT              reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
-    )               reduce using rule 66 (matrix_functions -> EYE ( id_int ) .)
+    (66) matrix_functions -> ONES ( id_int ) .
+    ;               reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    DOTDIVIDE       reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    DOTTIMES        reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    DOTMINUS        reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    DOTPLUS         reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    /               reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    *               reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    -               reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    +               reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    NE              reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    EQ              reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    GE              reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    LE              reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    GT              reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    LT              reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
+    )               reduce using rule 66 (matrix_functions -> ONES ( id_int ) .)
 
 
 state 152
 
-    (67) matrix_functions -> ONES ( id_int , . id_int )
-    (16) id_int -> . ID
-    (17) id_int -> . INTNUM
-    ID              shift and go to state 98
-    INTNUM          shift and go to state 101
+    (67) matrix_functions -> ZEROS ( id_int ) .
+    ;               reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    DOTDIVIDE       reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    DOTTIMES        reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    DOTMINUS        reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    DOTPLUS         reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    /               reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    *               reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    -               reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    +               reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    NE              reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    EQ              reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    GE              reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    LE              reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    GT              reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    LT              reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
+    )               reduce using rule 67 (matrix_functions -> ZEROS ( id_int ) .)
 
-    id_int                         shift and go to state 161
 
 state 153
-
-    (68) matrix_functions -> ONES ( id_int ) .
-    ;               reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    DOTDIVIDE       reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    DOTTIMES        reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    DOTMINUS        reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    DOTPLUS         reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    /               reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    *               reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    -               reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    +               reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    NE              reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    EQ              reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    GE              reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    LE              reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    GT              reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    LT              reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-    )               reduce using rule 68 (matrix_functions -> ONES ( id_int ) .)
-
-
-state 154
-
-    (69) matrix_functions -> ZEROS ( id_int , . id_int )
-    (16) id_int -> . ID
-    (17) id_int -> . INTNUM
-    ID              shift and go to state 98
-    INTNUM          shift and go to state 101
-
-    id_int                         shift and go to state 162
-
-state 155
-
-    (70) matrix_functions -> ZEROS ( id_int ) .
-    ;               reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    DOTDIVIDE       reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    DOTTIMES        reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    DOTMINUS        reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    DOTPLUS         reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    /               reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    *               reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    -               reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    +               reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    NE              reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    EQ              reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    GE              reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    LE              reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    GT              reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    LT              reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-    )               reduce using rule 70 (matrix_functions -> ZEROS ( id_int ) .)
-
-
-state 156
 
     (15) for_instruction -> FOR ID = id_int : . id_int instruction
     (16) id_int -> . ID
@@ -4612,16 +4480,16 @@ state 156
     ID              shift and go to state 98
     INTNUM          shift and go to state 101
 
-    id_int                         shift and go to state 163
+    id_int                         shift and go to state 157
 
-state 157
+state 154
 
     (58) id_ints -> id_ints , id_int .
     ]               reduce using rule 58 (id_ints -> id_ints , id_int .)
     ,               reduce using rule 58 (id_ints -> id_ints , id_int .)
 
 
-state 158
+state 155
 
     (14) while_instruction -> WHILE ( relation_expression ) instruction .
     RETURN          reduce using rule 14 (while_instruction -> WHILE ( relation_expression ) instruction .)
@@ -4639,7 +4507,7 @@ state 158
     ELSE            reduce using rule 14 (while_instruction -> WHILE ( relation_expression ) instruction .)
 
 
-state 159
+state 156
 
     (12) if_instruction -> IF ( relation_expression ) instruction .
     (13) if_instruction -> IF ( relation_expression ) instruction . ELSE instruction
@@ -4655,28 +4523,10 @@ state 159
     ID              reduce using rule 12 (if_instruction -> IF ( relation_expression ) instruction .)
     $end            reduce using rule 12 (if_instruction -> IF ( relation_expression ) instruction .)
     }               reduce using rule 12 (if_instruction -> IF ( relation_expression ) instruction .)
-    ELSE            shift and go to state 164
+    ELSE            shift and go to state 158
 
 
-state 160
-
-    (65) matrix_functions -> EYE ( id_int , id_int . )
-    )               shift and go to state 165
-
-
-state 161
-
-    (67) matrix_functions -> ONES ( id_int , id_int . )
-    )               shift and go to state 166
-
-
-state 162
-
-    (69) matrix_functions -> ZEROS ( id_int , id_int . )
-    )               shift and go to state 167
-
-
-state 163
+state 157
 
     (15) for_instruction -> FOR ID = id_int : id_int . instruction
     (3) instruction -> . RETURN right_hand_side_expression ;
@@ -4717,7 +4567,7 @@ state 163
     IF              shift and go to state 18
     ID              shift and go to state 16
 
-    instruction                    shift and go to state 168
+    instruction                    shift and go to state 159
     print_instruction              shift and go to state 7
     full_line_instruction          shift and go to state 8
     for_instruction                shift and go to state 9
@@ -4726,7 +4576,7 @@ state 163
     assign_instruction             shift and go to state 14
     matrix_ref                     shift and go to state 19
 
-state 164
+state 158
 
     (13) if_instruction -> IF ( relation_expression ) instruction ELSE . instruction
     (3) instruction -> . RETURN right_hand_side_expression ;
@@ -4767,7 +4617,7 @@ state 164
     IF              shift and go to state 18
     ID              shift and go to state 16
 
-    instruction                    shift and go to state 169
+    instruction                    shift and go to state 160
     print_instruction              shift and go to state 7
     full_line_instruction          shift and go to state 8
     for_instruction                shift and go to state 9
@@ -4776,70 +4626,7 @@ state 164
     assign_instruction             shift and go to state 14
     matrix_ref                     shift and go to state 19
 
-state 165
-
-    (65) matrix_functions -> EYE ( id_int , id_int ) .
-    ;               reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    DOTDIVIDE       reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    DOTTIMES        reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    DOTMINUS        reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    DOTPLUS         reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    /               reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    *               reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    -               reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    +               reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    NE              reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    EQ              reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    GE              reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    LE              reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    GT              reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    LT              reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-    )               reduce using rule 65 (matrix_functions -> EYE ( id_int , id_int ) .)
-
-
-state 166
-
-    (67) matrix_functions -> ONES ( id_int , id_int ) .
-    ;               reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    DOTDIVIDE       reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    DOTTIMES        reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    DOTMINUS        reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    DOTPLUS         reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    /               reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    *               reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    -               reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    +               reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    NE              reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    EQ              reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    GE              reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    LE              reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    GT              reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    LT              reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-    )               reduce using rule 67 (matrix_functions -> ONES ( id_int , id_int ) .)
-
-
-state 167
-
-    (69) matrix_functions -> ZEROS ( id_int , id_int ) .
-    ;               reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    DOTDIVIDE       reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    DOTTIMES        reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    DOTMINUS        reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    DOTPLUS         reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    /               reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    *               reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    -               reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    +               reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    NE              reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    EQ              reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    GE              reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    LE              reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    GT              reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    LT              reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-    )               reduce using rule 69 (matrix_functions -> ZEROS ( id_int , id_int ) .)
-
-
-state 168
+state 159
 
     (15) for_instruction -> FOR ID = id_int : id_int instruction .
     RETURN          reduce using rule 15 (for_instruction -> FOR ID = id_int : id_int instruction .)
@@ -4857,7 +4644,7 @@ state 168
     ELSE            reduce using rule 15 (for_instruction -> FOR ID = id_int : id_int instruction .)
 
 
-state 169
+state 160
 
     (13) if_instruction -> IF ( relation_expression ) instruction ELSE instruction .
     RETURN          reduce using rule 13 (if_instruction -> IF ( relation_expression ) instruction ELSE instruction .)
