@@ -176,10 +176,12 @@ class Interpreter:
         
         if isinstance(node.left, AST.IDNode):
             self.current_memory_stack.put(node.left.value, right_value, override=True)
+            # print(node.left.value)
             # print(node.left.value, right_value)
         elif isinstance(node.left, AST.Variable):
-            matrix_name = node.left.name 
+            matrix_name = str(node.left.name)
             corresponding_matrix = self.current_memory_stack.get(matrix_name)
+            # print(corresponding_matrix)
             m, n = len(corresponding_matrix), len(corresponding_matrix[0])
             i, j = self.visit(node.left.index[0]), self.visit(node.left.index[1])
             if (not (0 <= i < m)) or (not(0 <= j < n)):
@@ -251,7 +253,7 @@ class Interpreter:
     def visit(self, node: AST.EyeNode):
         if self.visit(node.arg_x) <= 0 or self.visit(node.arg_y) <= 0:
             raise Exception("Invalid matrix func call args")
-        return np.eye((self.visit(node.arg_x), self.visit(node.arg_y)))
+        return np.eye(self.visit(node.arg_x), self.visit(node.arg_y))
 
 
     @when(AST.IDRefNode)    
@@ -263,8 +265,7 @@ class Interpreter:
     def visit(self, node: AST.PrintableNode):
         # print(node.values)
         self.visit(node.printable)
-        # print("!")
-        print("")    
+        # print("")    
 
 
     @when(AST.ListOfPrintablesNode)
@@ -272,6 +273,8 @@ class Interpreter:
         # print(node.values)
         for value in node.printables_list:
             print(self.visit(value), end="  ")
+            # self.visit(value)
+        print()
 
 
     @when(AST.ExpressionNode)
