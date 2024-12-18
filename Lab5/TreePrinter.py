@@ -25,6 +25,14 @@ class TreePrinter:
     # def printTree(self, indent=0):
     #     print(f"{'|  ' * indent}EMPTY VECTOR")
 
+    @addToClass(AST.BreakInstruction)
+    def printTree(self, indent=0):
+        print(f"BREAK")
+
+    @addToClass(AST.ContinueInstruction)
+    def printTree(self, indent=0):
+        print(f"CONTINUE")    
+
     @addToClass(AST.AssignInstruction)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}{self.operator}")
@@ -75,15 +83,16 @@ class TreePrinter:
     @addToClass(AST.PrintableNode)
     def printTree(self, indent=0):
         print(f"{'|  ' * indent}PRINT")
-        for value in self.values:
-            value.printTree(indent)
+        # for value in self.printable:
+        #     value.printTree(indent)
+        self.printable.printTree(indent)
 
     @addToClass(AST.ListOfPrintablesNode)
     def printTree(self, indent=0):
         # for value in self.values:
         #     print(f"{'|  ' * (indent + 1)}{value}")
 
-        for value in self.values:
+        for value in self.printables_list:
             value.printTree(indent + 1)
 
     @addToClass(AST.Variable)

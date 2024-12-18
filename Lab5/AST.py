@@ -133,13 +133,13 @@ class IDRefNode(Node):
 
 
 class PrintableNode(Node):
-    def __init__(self, values):
-        self.values = values
+    def __init__(self, printable):
+        self.printable = printable
 
 
 class ListOfPrintablesNode(Node):
-    def __init__(self, values):
-        self.values = values
+    def __init__(self, printables_list):
+        self.printables_list = printables_list
 
 
 class ExpressionNode(Node):

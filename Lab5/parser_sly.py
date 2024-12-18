@@ -75,13 +75,14 @@ class Mparser(Parser):
 
     @_('PRINT printables ";"')
     def print_instruction(self, p):
-        return AST.PrintableNode([p[1]])
+        # return AST.PrintableNode([p[1]])
+        return AST.PrintableNode(p[1])
 
     @_('printables "," value',
        'value')
     def printables(self, p):
         if len(p) == 3:
-            return AST.ListOfPrintablesNode(p[0].values + [p[2]])
+            return AST.ListOfPrintablesNode(p[0].printables_list + [p[2]])
         else:
             return AST.ListOfPrintablesNode([p[0]])
 

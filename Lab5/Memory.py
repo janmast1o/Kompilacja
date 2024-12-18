@@ -19,13 +19,17 @@ class Memory:
 
 
 class MemoryStack:
-    def __init__(self, parent = None, initial_stack_name = "global"):
+    def __init__(self, parent = None, name = "global"):
         self.parent : MemoryStack = parent
         self.current_memory : Memory = Memory()
-        self.mem_stack_name : str = initial_stack_name
+        self.mem_stack_name : str = name
 
 
     def get(self, name):
+        # print(name)
+        # print(type(name))
+        # print(self.current_memory.memory_map)
+        # print(self.current_memory.has_key(name))
         if self.current_memory.has_key(name):
             return self.current_memory.get(name)
         elif self.parent is not None:
