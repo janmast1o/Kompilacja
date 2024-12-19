@@ -76,9 +76,11 @@ class Interpreter:
     @when(AST.InstructionsNode)
     def visit(self, node: AST.InstructionsNode):
         for instruction in node.instructions:
-            if self.visit(instruction) == LoopResidingInstruction.BREAK_INS:
+            # print(instruction)
+            visited_res = self.visit(instruction)
+            if visited_res == LoopResidingInstruction.BREAK_INS:
                 return LoopResidingInstruction.BREAK_INS
-            elif self.visit(instruction) == LoopResidingInstruction.CONTINUE_INS:
+            elif visited_res == LoopResidingInstruction.CONTINUE_INS:
                 return LoopResidingInstruction.CONTINUE_INS
 
 
@@ -137,7 +139,9 @@ class Interpreter:
         self.current_memory_stack = self.current_memory_stack.push_scope(name="loop_body")
         while self.visit(node.condition):
             returned_value = self.visit(node.body)
+            # print(f"While, {returned_value}")
             if returned_value == LoopResidingInstruction.BREAK_INS:
+                # print("Breaking")
                 break
 
         self.current_memory_stack = self.current_memory_stack.pop_scope()    
@@ -170,22 +174,40 @@ class Interpreter:
     @when(AST.AssignInstruction)
     def visit(self, node: AST.AssignInstruction):
         right_value = self.visit(node.right)
+
         if right_value is None:
             raise Exception(f"Implementation error")
-            # return 
         
-        if isinstance(node.left, AST.IDNode):
-            self.current_memory_stack.put(node.left.value, right_value, override=True)
-            # print(node.left.value, right_value)
-        elif isinstance(node.left, AST.Variable):
-            matrix_name = node.left.name 
-            corresponding_matrix = self.current_memory_stack.get(matrix_name)
-            m, n = len(corresponding_matrix), len(corresponding_matrix[0])
-            i, j = self.visit(node.left.index[0]), self.visit(node.left.index[1])
-            if (not (0 <= i < m)) or (not(0 <= j < n)):
-                raise Exception(f"Matrix bounds breached during subscription {i}, {j} is invalid for matrix of size: {m}, {n}")
-            else:
-                corresponding_matrix[i][j] = right_value
+        op = node.operator
+        if op == "=":            
+            if isinstance(node.left, AST.IDNode):
+                self.current_memory_stack.put(node.left.value, right_value, override=True)
+                # print(node.left.value, right_value)
+            elif isinstance(node.left, AST.Variable):
+                matrix_name = node.left.name 
+                corresponding_matrix = self.current_memory_stack.get(matrix_name)
+                m, n = corresponding_matrix.shape[0], corresponding_matrix.shape[1]
+                i, j = self.visit(node.left.index[0]), self.visit(node.left.index[1])
+                if (not (0 <= i < m)) or (not(0 <= j < n)):
+                    raise Exception(f"Matrix bounds breached during subscription {i}, {j} is invalid for matrix of size: {m}, {n}")
+                else:
+                    corresponding_matrix[i][j] = right_value
+        else:
+            if isinstance(node.left, AST.IDNode):
+                left_value = self.current_memory_stack.get(node.left.value)
+                self.current_memory_stack.put(node.left.value, apply_operator(op, left_value, right_value))
+            elif isinstance(node.left, AST.Variable):
+                matrix_name = node.left.name
+                corresponding_matrix = self.current_memory_stack.get(matrix_name)
+                residing_value = corresponding_matrix[i][j]
+                m, n = corresponding_matrix.shape[0], corresponding_matrix.shape[1]
+                i, j = self.visit(node.left.index[0]), self.visit(node.left.index[1])
+                if (not (0 <= i < m)) or (not (0 <= j < n)):
+                    raise Exception(f"Matrix bounds breached during subscription {i}, {j} is invalid for matrix of size: {m}, {n}")
+                else:
+                    corresponding_matrix[i][j] = apply_operator(op, residing_value, right_value)
+
+                        
 
 
     @when(AST.Variable)
@@ -195,7 +217,7 @@ class Interpreter:
             # print(self.current_memory_stack.current_memory.memory_map)
             raise Exception(f"Variable under name: {node.name.value} is unitialized")
 
-        m, n = len(corresponding_matrix), len(corresponding_matrix[0])
+        m, n = corresponding_matrix.shape[0], corresponding_matrix.shape[1]
         i, j = self.visit(node.index[0]), self.visit(node.index[1]) 
         if (not (0 <= i < m)) or (not(0 <= j < n)):
             raise Exception(f"Matrix bounds breached during subscription {i}, {j} is invalid for matrix of size: {m}, {n}")
@@ -207,6 +229,7 @@ class Interpreter:
     def visit(self, node: AST.BinExpr):
         left_value = self.visit(node.left)
         right_value = self.visit(node.right)
+        # print(left_value, right_value)
         return apply_operator(node.op, left_value, right_value)
 
 
