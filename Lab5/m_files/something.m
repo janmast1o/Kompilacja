@@ -11,6 +11,7 @@ print J, J, J;
 
 while (J != 2) {
     # print 1, 2, J;
+    J = J+J;
     print 0, D, J;
     break;    
 }
