@@ -59,11 +59,13 @@ class Mparser(Parser):
 
     @_('WHILE "(" relation_expression ")" instruction')
     def while_instruction(self, p):
-        return AST.WhileNode(p.relation_expression, p.instruction)
+        # return AST.WhileNode(p.relation_expression, p.instruction)
+        return AST.WhileNode(p[2], p[4])
 
     @_('FOR ID "=" id_int ":" id_int instruction')
     def for_instruction(self, p):
-        return AST.ForNode(p.ID, p.id_int0, p.id_int1, p.instruction)
+        #return AST.ForNode(p.ID, p.id_int0, p.id_int1, p.instruction)
+        return AST.ForNode(AST.IDNode(p[1]), p[3], p[5], p[6])
 
     @_('INTNUM')
     def id_int(self, p):
@@ -249,6 +251,8 @@ class Mparser(Parser):
         return AST.VectorNode([])
 
     @_('variables "," value',
-       'value')
+       'value',
+       'variables "," unary',
+       'unary')
     def variables(self, p):
         return p[0] + [p[2]] if len(p) == 3 else [p[0]]

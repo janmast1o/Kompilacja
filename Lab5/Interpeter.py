@@ -8,27 +8,27 @@ import numpy as np
 
 
 def perform_multiplication(x, y):
-    if isinstance(x, np.array) and isinstance(y, np.array):
+    if isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
         return x @ y
-    elif isinstance(x, np.array) or isinstance(y, np.array):
+    elif isinstance(x, np.ndarray) or isinstance(y, np.ndarray):
         raise Exception(f"Invalid types in multiplication")
     else:
         return x*y
     
 
 def perform_dot_multiplication(x, y):
-    if isinstance(x, np.array) and isinstance(y, np.array):
+    if isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
         return np.multiply(x, y)
-    elif isinstance(x, np.array) or isinstance(y, np.array):
+    elif isinstance(x, np.ndarray) or isinstance(y, np.ndarray):
         raise Exception(f"Invalid types in multiplication")
     else:
         return x*y   
 
 
 def perform_dot_divide(x, y):
-    if isinstance(x, np.array) and isinstance(y, np.array):
+    if isinstance(x, np.ndarray) and isinstance(y, np.ndarray):
         return np.divide(x, y)
-    elif isinstance(x, np.array) or isinstance(y, np.array):
+    elif isinstance(x, np.ndarray) or isinstance(y, np.ndarray):
         raise Exception(f"Invalid types in multiplication")
     else:
         return x/y   
@@ -58,9 +58,18 @@ def apply_operator(op, x, y):
         return op_dict[op](x,y)
     
 
-class LoopResidingInstruction(Enum):
+assign_op_to_op_dict = {"+=" : "+", "-=" : "-", "*=" : "*", "/=" : "/"}
+def apply_assign_operator(op, x, y):
+    if op not in assign_op_to_op_dict:
+        raise Exception("Invalid assign operator")
+    else:
+        return op_dict[assign_op_to_op_dict[op]](x,y)
+    
+
+class SpecialCaseInstruction(Enum):
     BREAK_INS = 1,
-    CONTINUE_INS = 2
+    CONTINUE_INS = 2,
+    RETURN_INS = 3
 
 
 class Interpreter:
@@ -78,10 +87,12 @@ class Interpreter:
         for instruction in node.instructions:
             # print(instruction)
             visited_res = self.visit(instruction)
-            if visited_res == LoopResidingInstruction.BREAK_INS:
-                return LoopResidingInstruction.BREAK_INS
-            elif visited_res == LoopResidingInstruction.CONTINUE_INS:
-                return LoopResidingInstruction.CONTINUE_INS
+            if visited_res == SpecialCaseInstruction.BREAK_INS:
+                return SpecialCaseInstruction.BREAK_INS
+            elif visited_res == SpecialCaseInstruction.CONTINUE_INS:
+                return SpecialCaseInstruction.CONTINUE_INS
+            elif visited_res == SpecialCaseInstruction.RETURN_INS:
+                return 
 
 
     @when(AST.BreakInstruction)
@@ -89,7 +100,7 @@ class Interpreter:
         if self.current_memory_stack.mem_stack_name != "loop_body":
             raise Exception(f"Break exception can only occur inside loop body")
         
-        return LoopResidingInstruction.BREAK_INS 
+        return SpecialCaseInstruction.BREAK_INS 
             
     
     @when(AST.ContinueInstruction)
@@ -97,13 +108,12 @@ class Interpreter:
         if self.current_memory_stack.mem_stack_name != "loop_body":
             raise Exception(f"Continue instruction can only occur inside loop body")
         
-        return LoopResidingInstruction.CONTINUE_INS
+        return SpecialCaseInstruction.CONTINUE_INS
 
 
     @when(AST.ReturnInstruction)
     def visit(self, node: AST.ReturnInstruction):
-        ...
-        # return finish termination    
+        return SpecialCaseInstruction.RETURN_INS  
 
 
     @when(AST.IntNum)
@@ -126,7 +136,7 @@ class Interpreter:
 
     @when(AST.IDNode)
     def visit(self, node: AST.IDNode):
-        read_value = self.current_memory_stack.get(str(node.value))
+        read_value = self.current_memory_stack.get(node.value)
         if read_value is None:
             raise Exception(f"Attempting to refer to uninitialized variable: {node.value}")
         
@@ -139,9 +149,7 @@ class Interpreter:
         self.current_memory_stack = self.current_memory_stack.push_scope(name="loop_body")
         while self.visit(node.condition):
             returned_value = self.visit(node.body)
-            # print(f"While, {returned_value}")
-            if returned_value == LoopResidingInstruction.BREAK_INS:
-                # print("Breaking")
+            if returned_value == SpecialCaseInstruction.BREAK_INS:
                 break
 
         self.current_memory_stack = self.current_memory_stack.pop_scope()    
@@ -153,22 +161,26 @@ class Interpreter:
         end_value = self.visit(node.end)
         self.current_memory_stack = self.current_memory_stack.push_scope(name="loop_body")
         self.current_memory_stack.put(node.variable.value, start_value)
-        while self.current_memory_stack.get(node.variable.name) <= end_value:
+        while self.current_memory_stack.get(node.variable.value) <= end_value:
             returned_value = self.visit(node.body)
-            if returned_value == LoopResidingInstruction.BREAK_INS:
+            if returned_value == SpecialCaseInstruction.BREAK_INS:
                 break 
+            self.current_memory_stack.put(
+                node.variable.value, 
+                self.current_memory_stack.get(node.variable.value)+1
+            )
 
         self.current_memory_stack = self.current_memory_stack.pop_scope()
 
 
     @when(AST.IfElseNode)
     def visit(self, node: AST.IfElseNode):
-        self.current_memory_stack = self.current_memory_stack.push_scope("if_body")
+        # self.current_memory_stack = self.current_memory_stack.push_scope("if_body")
         if self.visit(node.condition):
             self.visit(node.if_body)
-        else:
+        elif node.else_body is not None:
             self.visit(node.else_body)
-        self.current_memory_stack = self.current_memory_stack.pop_scope()    
+        # self.current_memory_stack = self.current_memory_stack.pop_scope()    
 
 
     @when(AST.AssignInstruction)
@@ -181,52 +193,53 @@ class Interpreter:
         if op == "=":            
             if isinstance(node.left, AST.IDNode):
                 self.current_memory_stack.put(node.left.value, right_value, override=True)
+                # print(type(node.left.value))
                 # print(node.left.value, right_value)
             elif isinstance(node.left, AST.Variable):
-                matrix_name = node.left.name 
+                # print(type(node.left.name))
+                matrix_name = node.left.name.value
                 corresponding_matrix = self.current_memory_stack.get(matrix_name)
                 m, n = corresponding_matrix.shape[0], corresponding_matrix.shape[1]
                 i, j = self.visit(node.left.index[0]), self.visit(node.left.index[1])
                 if (not (0 <= i < m)) or (not(0 <= j < n)):
                     raise Exception(f"Matrix bounds breached during subscription {i}, {j} is invalid for matrix of size: {m}, {n}")
                 else:
-                    corresponding_matrix[i][j] = right_value
+                    corresponding_matrix[i,j] = right_value
         else:
             if isinstance(node.left, AST.IDNode):
                 left_value = self.current_memory_stack.get(node.left.value)
-                self.current_memory_stack.put(node.left.value, apply_operator(op, left_value, right_value))
+                self.current_memory_stack.put(node.left.value, apply_assign_operator(op, left_value, right_value))
             elif isinstance(node.left, AST.Variable):
                 matrix_name = node.left.name
                 corresponding_matrix = self.current_memory_stack.get(matrix_name)
-                residing_value = corresponding_matrix[i][j]
                 m, n = corresponding_matrix.shape[0], corresponding_matrix.shape[1]
                 i, j = self.visit(node.left.index[0]), self.visit(node.left.index[1])
                 if (not (0 <= i < m)) or (not (0 <= j < n)):
                     raise Exception(f"Matrix bounds breached during subscription {i}, {j} is invalid for matrix of size: {m}, {n}")
                 else:
-                    corresponding_matrix[i][j] = apply_operator(op, residing_value, right_value)
+                    residing_value = corresponding_matrix[i,j]
+                    corresponding_matrix[i,j] = apply_assign_operator(op, residing_value, right_value)
 
 
     @when(AST.Variable)
     def visit(self, node: AST.Variable):
         corresponding_matrix = self.current_memory_stack.get(node.name.value)
         if corresponding_matrix is None:
-            # print(self.current_memory_stack.current_memory.memory_map)
             raise Exception(f"Variable under name: {node.name.value} is unitialized")
 
         m, n = corresponding_matrix.shape[0], corresponding_matrix.shape[1]
         i, j = self.visit(node.index[0]), self.visit(node.index[1]) 
-        if (not (0 <= i < m)) or (not(0 <= j < n)):
+        if (not (0 <= i < m)) or (not (0 <= j < n)):
             raise Exception(f"Matrix bounds breached during subscription {i}, {j} is invalid for matrix of size: {m}, {n}")
         else:
-            return self.visit(corresponding_matrix[i][j])
+            # print(corresponding_matrix[i,j])
+            return corresponding_matrix[i,j]
 
 
     @when(AST.BinExpr)
     def visit(self, node: AST.BinExpr):
         left_value = self.visit(node.left)
         right_value = self.visit(node.right)
-        # print(left_value, right_value)
         return apply_operator(node.op, left_value, right_value)
 
 
@@ -248,7 +261,7 @@ class Interpreter:
         elif node.func_name == 'ones':
             created_matrix = np.ones((self.visit(node.arg_x), self.visit(node.arg_y)))
         elif node.func_name == 'eye':
-            created_matrix = np.eye((self.visit(node.arg_x), self.visit(node.arg_y)))
+            created_matrix = np.eye(self.visit(node.arg_x), self.visit(node.arg_y))
 
         return created_matrix
 
@@ -281,17 +294,13 @@ class Interpreter:
 
     @when(AST.PrintableNode)
     def visit(self, node: AST.PrintableNode):
-        # print(node.values)
         self.visit(node.printable)
-        # print("")    
 
 
     @when(AST.ListOfPrintablesNode)
     def visit(self, node: AST.ListOfPrintablesNode):
-        # print(node.values)
         for value in node.printables_list:
             print(self.visit(value), end="  ")
-            # self.visit(value)
         print()
 
 
@@ -325,7 +334,7 @@ class Interpreter:
         read_matrix = []
         read_matrix_cols = None
         for v in node.vectors:
-            vector = self.visit(v)
+            vector = (self.visit(v)).tolist()
             vec_length = len(vector)
             if read_matrix_cols is None:
                 read_matrix_cols = vec_length

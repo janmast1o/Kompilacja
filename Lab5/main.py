@@ -21,7 +21,7 @@ if __name__ == '__main__':
     parser = Mparser()
 
     ast = parser.parse(lexer.tokenize(text))
-    # ast.printTree()
+    ast.printTree()
 
     # Below code shows how to use visitor
     typeChecker = TypeChecker()   

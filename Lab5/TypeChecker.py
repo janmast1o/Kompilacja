@@ -239,13 +239,13 @@ class TypeChecker(NodeVisitor):
         if condition_type != "bool":
             raise Exception(f"The condition must of type bool, not {condition_type}")
 
-        self.current_symbol_table = self.current_symbol_table.pushScope("if_body")
+        # self.current_symbol_table = self.current_symbol_table.pushScope("if_body")
         self.visit(node.if_body)
-        self.current_symbol_table = self.current_symbol_table.popScope()
+        # self.current_symbol_table = self.current_symbol_table.popScope()
 
-        self.current_symbol_table = self.current_symbol_table.pushScope("else_body")
+        # self.current_symbol_table = self.current_symbol_table.pushScope("else_body")
         self.visit(node.else_body)
-        self.current_symbol_table = self.current_symbol_table.popScope()
+        # self.current_symbol_table = self.current_symbol_table.popScope()
 
         return None, None
 
@@ -258,6 +258,7 @@ class TypeChecker(NodeVisitor):
         if op == "=":
             if isinstance(left_side, AST.IDNode):
                 symbol = VariableSymbol(left_side.value, right_side_type, right_side_add)
+                # print(symbol, left_side, left_side.value)
                 self.current_symbol_table.put(left_side.value, symbol)
 
             elif isinstance(left_side, AST.Variable):
