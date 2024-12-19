@@ -177,7 +177,6 @@ class Interpreter:
 
         if right_value is None:
             raise Exception(f"Implementation error")
-        
         op = node.operator
         if op == "=":            
             if isinstance(node.left, AST.IDNode):
@@ -206,8 +205,6 @@ class Interpreter:
                     raise Exception(f"Matrix bounds breached during subscription {i}, {j} is invalid for matrix of size: {m}, {n}")
                 else:
                     corresponding_matrix[i][j] = apply_operator(op, residing_value, right_value)
-
-                        
 
 
     @when(AST.Variable)
@@ -274,7 +271,7 @@ class Interpreter:
     def visit(self, node: AST.EyeNode):
         if self.visit(node.arg_x) <= 0 or self.visit(node.arg_y) <= 0:
             raise Exception("Invalid matrix func call args")
-        return np.eye((self.visit(node.arg_x), self.visit(node.arg_y)))
+        return np.eye(self.visit(node.arg_x), self.visit(node.arg_y))
 
 
     @when(AST.IDRefNode)    
@@ -286,8 +283,7 @@ class Interpreter:
     def visit(self, node: AST.PrintableNode):
         # print(node.values)
         self.visit(node.printable)
-        # print("!")
-        print("")    
+        # print("")    
 
 
     @when(AST.ListOfPrintablesNode)
@@ -295,6 +291,8 @@ class Interpreter:
         # print(node.values)
         for value in node.printables_list:
             print(self.visit(value), end="  ")
+            # self.visit(value)
+        print()
 
 
     @when(AST.ExpressionNode)
