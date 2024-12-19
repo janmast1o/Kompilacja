@@ -92,7 +92,7 @@ class Interpreter:
             elif visited_res == SpecialCaseInstruction.CONTINUE_INS:
                 return SpecialCaseInstruction.CONTINUE_INS
             elif visited_res == SpecialCaseInstruction.RETURN_INS:
-                return 
+                return         
 
 
     @when(AST.BreakInstruction)
@@ -137,6 +137,7 @@ class Interpreter:
     @when(AST.IDNode)
     def visit(self, node: AST.IDNode):
         read_value = self.current_memory_stack.get(node.value)
+        # print(self.current_memory_stack.current_memory.memory_map)
         if read_value is None:
             raise Exception(f"Attempting to refer to uninitialized variable: {node.value}")
         
@@ -149,7 +150,7 @@ class Interpreter:
         self.current_memory_stack = self.current_memory_stack.push_scope(name="loop_body")
         while self.visit(node.condition):
             returned_value = self.visit(node.body)
-            if returned_value == SpecialCaseInstruction.BREAK_INS:
+            if returned_value == SpecialCaseInstruction.BREAK_INS: # handling return better
                 break
 
         self.current_memory_stack = self.current_memory_stack.pop_scope()    
@@ -163,7 +164,7 @@ class Interpreter:
         self.current_memory_stack.put(node.variable.value, start_value)
         while self.current_memory_stack.get(node.variable.value) <= end_value:
             returned_value = self.visit(node.body)
-            if returned_value == SpecialCaseInstruction.BREAK_INS:
+            if returned_value == SpecialCaseInstruction.BREAK_INS: # handling return better
                 break 
             self.current_memory_stack.put(
                 node.variable.value, 
@@ -316,6 +317,7 @@ class Interpreter:
 
     @when(AST.TransposeNode)
     def visit(self, node: AST.TransposeNode):
+        print(np.transpose(self.visit(node.expr)))
         return np.transpose(self.visit(node.expr))
 
 
