@@ -146,6 +146,10 @@ class Mparser(Parser):
             return AST.TransposeNode(p[0])
 
         return AST.ExpressionNode(p[1])
+    
+    @_('ID "\'"')
+    def right_hand_side_expression(self, p):
+        return AST.TransposeNode(AST.IDNode(p[0]))
 
     @_('right_hand_side_expression "+" right_hand_side_expression',
        'right_hand_side_expression "-" right_hand_side_expression',
