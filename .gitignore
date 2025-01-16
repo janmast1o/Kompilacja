@@ -162,3 +162,5 @@ cython_debug/
 #.idea/
 
 Lab1/.idea/
+
+*.idea/
