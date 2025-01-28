@@ -1,0 +1,27 @@
+a = 1+1;
+b = 1-1;
+c = 4*.4;
+d = 5/2; # testing binary operators
+
+print(1 == 5);
+print(b != c);
+print(a > d);
+print(a < c);;
+print(a <= a);
+print(1 >= b); # testing compare operators
+
+a += b;
+a -= c;
+c *= d;
+d /= a; # testing assign operators
+
+A = zeros(3);
+B = eye(3);
+C = [[3,4,5],
+     [6,8,99],
+     [1,1,10]];
+matrix_set = {A, B, C};
+D = A .+ B;
+E = A .- D;
+F = C .* E;
+G = F ./ A; # dot operators
