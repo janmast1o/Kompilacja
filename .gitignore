@@ -162,3 +162,7 @@ cython_debug/
 #.idea/
 
 Lab1/.idea/
+**/.idea/
+**/bus/
+**/__pycache__/
+**/parser.out

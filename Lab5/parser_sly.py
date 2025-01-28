@@ -14,7 +14,7 @@ class Mparser(Parser):
         ('nonassoc', LE, GE, EQ, NE, LT, GT),
         ('left', '+', '-', DOTPLUS, DOTMINUS),
         ('left', '*', '/', DOTTIMES, DOTDIVIDE),
-        ('nonassoc', "'"),
+        ('nonassoc', "`"),
         ('right', UMINUS),
     )
 
@@ -138,7 +138,7 @@ class Mparser(Parser):
        'matrix_functions',
        'value',
        'matrix_ref',
-       'matrix "\'"')
+       'matrix "`"')
     def right_hand_side_expression(self, p):
         if len(p) == 1:
             return AST.ExpressionNode(p[0])
