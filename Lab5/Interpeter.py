@@ -317,7 +317,7 @@ class Interpreter:
 
     @when(AST.TransposeNode)
     def visit(self, node: AST.TransposeNode):
-        print(np.transpose(self.visit(node.expr)))
+        # print(np.transpose(self.visit(node.expr)))
         return np.transpose(self.visit(node.expr))
 
 
